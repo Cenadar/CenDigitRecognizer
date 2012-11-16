@@ -13,8 +13,18 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    cdigitneuron.cpp \
+    cpixelmatrix.cpp \
+    cweightsreader.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    cdigitneuron.h \
+    cpixelmatrix.h \
+    settings.h \
+    cweightsreader.h
 
 FORMS    += mainwindow.ui
+
+OTHER_FILES += \
+    README.md
