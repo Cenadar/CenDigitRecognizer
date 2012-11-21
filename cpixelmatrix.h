@@ -1,28 +1,30 @@
 #ifndef CPIXELMATRIX_H
 #define CPIXELMATRIX_H
 
-#include <vector>
+#include <QVector>
+#include "iserializable.h"
+#include "settings.h"
 
 using namespace std;
 
-typedef unsigned char TColor;
-
-class IPixelMatrix {
+class IPixelMatrix: public ISerializable {
  public:
-  virtual ~IPixelMatrix() = 0;
+  ~IPixelMatrix() {}
 
-  virtual TColor get_pixel(int x, int y) = 0;
+  virtual TColor get_pixel(int row, int col) const = 0;
 };
 
 
 class CPixelMatrix: public IPixelMatrix {
- public:
-  CPixelMatrix();
+ public:  
+  CPixelMatrix(QVector<QVector<TColor> > matrix_);
   ~CPixelMatrix() {}
 
-  TColor get_pixel(int x, int y);
+  TColor get_pixel(int row, int col) const;
+  QDomElement serialize(QDomDocument &document,
+                        QMap<QString, QString> attributes) const;
  private:
-  vector<vector<TColor> > matrix;
+  QVector<QVector<TColor> > matrix;
 };
 
 #endif // CPIXELMATRIX_H

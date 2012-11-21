@@ -3,11 +3,11 @@
 
 class IWeightsReader {
  public:
-  virtual ~IWeightsReader() = 0;
+  virtual ~IWeightsReader() {}
 };
 
 
-class CWeightsReader: I {
+class CWeightsReader: IWeightsReader {
  public:
   CWeightsReader();
 };

@@ -2,14 +2,17 @@
 #define CDIGITNEURON_H
 
 #include "cpixelmatrix.h"
+#include "iserializable.h"
+
+using namespace std;
 
 typedef int TSignal;
 
-class IDigitNeuron {
+class IDigitNeuron: public ISerializable {
  public:
-  virtual ~IDigitNeuron() = 0;
+  virtual ~IDigitNeuron() {}
 
-  virtual TSignal get_output(IPixelMatrix *input) = 0;
+  virtual TSignal get_output(IPixelMatrix *input) const = 0;
 };
 
 
@@ -18,9 +21,11 @@ class CDigitNeuron: public IDigitNeuron {
   CDigitNeuron();
   ~CDigitNeuron() {}
 
-  TSignal get_output(IPixelMatrix *input);
+  TSignal get_output(IPixelMatrix *input) const;
+  QDomElement serialize(QDomDocument &document,
+                        QMap<QString, QString> attributes) const;
  private:
-  vector<vector<int> > w;
+  QVector<QVector<int> > weight;
 };
 
 #endif // CDIGITNEURON_H
