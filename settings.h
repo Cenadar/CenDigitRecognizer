@@ -3,21 +3,25 @@
 
 #include <QString>
 
-typedef unsigned int TColor;
+typedef int TColor;
+typedef double TSignal;
 
 class RecognizerSettings {
  public:
-  static int height() {return 64;}
-  static int width() {return 64;}
+  static int NeuronHeight() {return 60;}
+  static int NeuronWidth() {return 30;}
 
-  static int cell_height() {return 8;}
-  static int cell_width() {return 8;}
+  static int CellHeight() {return 6;}
+  static int CellWidth() {return 6;}
 
   static int PenRadius() {return 5;}
-  static int FPS() {return 40;}
+  static int FPS() {return 20;}
 
-  static int DiagramWidth() {return 100;}
-  static int DiagramHeight() {return 200;}
+  static int DiagramWidth() {return 300;}
+  static int DiagramHeight() {return 400;}
+
+  static int NeuronTeachCorrectModifier() {return +5;}
+  static int NeuronTeachIncorrectModifier() {return -1;}
 
   static const QString default_weights_dir() {return "weights";}
 };

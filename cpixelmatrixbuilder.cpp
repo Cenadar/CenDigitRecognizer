@@ -3,8 +3,7 @@
 #include <cassert>
 
 CPixelMatrixBuilder::CPixelMatrixBuilder() {
-  matrix.fill(QVector<TColor>(RecognizerSettings::width(), 0),
-              RecognizerSettings::height());
+  clear();
 }
 
 
@@ -24,4 +23,10 @@ TColor CPixelMatrixBuilder::get_color(int row, int col) const {
   assert(0 <= row && row < matrix.size());
   assert(0 <= col && col < matrix[row].size());
   return matrix[row][col];
+}
+
+
+void CPixelMatrixBuilder::clear() {
+  matrix.fill(QVector<TColor>(RecognizerSettings::NeuronWidth(), 0),
+              RecognizerSettings::NeuronHeight());
 }

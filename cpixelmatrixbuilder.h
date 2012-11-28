@@ -10,6 +10,7 @@ class IPixelMatrixBuilder {
   virtual IPixelMatrix* build() const = 0;
   virtual void set_color(int row, int col, TColor color) = 0;
   virtual TColor get_color(int row, int col) const = 0;
+  virtual void clear() = 0;
 };
 
 
@@ -20,6 +21,7 @@ class CPixelMatrixBuilder: public IPixelMatrixBuilder {
   IPixelMatrix* build() const;
   void set_color(int row, int col, TColor color);
   TColor get_color(int row, int col) const;
+  void clear();
  private:
   QVector<QVector<TColor> > matrix;
 };

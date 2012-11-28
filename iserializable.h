@@ -7,8 +7,7 @@ class ISerializable {
  public:
   virtual ~ISerializable() {}
 
-  virtual QDomElement serialize(QDomDocument& document,
-                                QMap<QString, QString> attributes) const = 0;
+  virtual QDomElement serialize(QDomDocument& document) const = 0;
 };
 
 #endif // ISERIALIZABLE_H

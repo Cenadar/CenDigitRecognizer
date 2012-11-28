@@ -1,38 +1,58 @@
 #include "cdigitneuron.h"
 #include "settings.h"
-
-
-CDigitNeuron::CDigitNeuron() {
-  weight.fill(QVector<int>(RecognizerSettings::width(), 257),
-                RecognizerSettings::height());
-}
-
+#include <cmath>
 
 TSignal CDigitNeuron::get_output(IPixelMatrix *input) const {
-  TSignal output = 0;
+  TSignal output = 0;  
 
-  for(int row = 0; row < RecognizerSettings::height(); ++row)
-    for(int col = 0; col < RecognizerSettings::width(); ++col)
-      output += weight[row][col] * input->get_pixel(row, col);
+  for(int row = 0; row < RecognizerSettings::NeuronHeight(); ++row)
+    for(int col = 0; col < RecognizerSettings::NeuronWidth(); ++col) {
+      TSignal add = weight[row][col] * pow(abs(input->get_signal(row, col)), 0.5);
+      if (input->get_signal(row, col) < 1e-9) add = -add;
+      output += add;
+    }
 
+  if (output < 0) return 0;
   return output;
 }
 
 
-QDomElement CDigitNeuron::serialize(QDomDocument &document,
-                                    QMap<QString, QString> attributes) const {
+void CDigitNeuron::teach(IPixelMatrix *input, bool correctness) {
+  int modifier;
+  if (correctness)
+    modifier = RecognizerSettings::NeuronTeachCorrectModifier();
+  else
+    modifier = RecognizerSettings::NeuronTeachIncorrectModifier();
+
+  for(int row = 0; row < RecognizerSettings::NeuronHeight(); ++row)
+    for(int col = 0; col < RecognizerSettings::NeuronWidth(); ++col)
+      weight[row][col] += modifier*input->get_signal(row, col);
+}
+
+
+QDomElement CDigitNeuron::serialize(QDomDocument &document) const {
   QDomElement result = document.createElement("Neuron");
-  for(QMap<QString, QString>::Iterator it = attributes.begin();
-      it != attributes.end(); ++it) {
-    result.setAttribute(it.key(), *it);
-  }
+
+  QDomElement elem;
+  QDomText text;
+  elem = document.createElement("Height");
+  text = document.createTextNode(
+        QString::number(RecognizerSettings::NeuronHeight()));
+  elem.appendChild(text);
+  result.appendChild(elem);
+
+  elem = document.createElement("Width");
+  text = document.createTextNode(
+        QString::number(RecognizerSettings::NeuronWidth()));
+  elem.appendChild(text);
+  result.appendChild(elem);
 
   for(int row = 0; row < weight.size(); ++row)
     for(int col = 0; col < weight[row].size(); ++col) {
-      QDomElement elem = document.createElement("Synapse");
-      elem.setAttribute("row", row);
-      elem.setAttribute("col", col);
-      QDomText text = document.createTextNode(QString::number(weight[row][col]));
+      elem = document.createElement("SynapseR" + QString::number(row) + "C" +
+                                    QString::number(col));
+
+      text = document.createTextNode(QString::number(weight[row][col]));
       elem.appendChild(text);
       result.appendChild(elem);
     }

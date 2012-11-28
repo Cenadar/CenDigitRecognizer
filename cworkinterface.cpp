@@ -15,9 +15,9 @@ void CVisualWorkInterface::paintEvent(QPaintEvent* /*event*/,
 
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setPen(Qt::darkGreen);
-  for(int row = 0; row < RecognizerSettings::height(); ++row)
-    for(int col = 0; col < RecognizerSettings::width(); ++col) {
-      if (builder->get_color(row, col) >= 192)
+  for(int row = 0; row < RecognizerSettings::NeuronHeight(); ++row)
+    for(int col = 0; col < RecognizerSettings::NeuronWidth(); ++col) {
+      if (builder->get_color(row, col) >= 192) // TODO formalize constants
         painter.setBrush(Qt::darkGreen);
       else if (builder->get_color(row, col) >= 128)
         painter.setBrush(Qt::darkGray);
@@ -38,16 +38,16 @@ void CVisualWorkInterface::paintEvent(QPaintEvent* /*event*/,
 void CVisualWorkInterface::mouseEvent(QMouseEvent *event) {
   int col = (event->x() - base_corner.x()) / cell_width;
   int row = (event->y() - base_corner.y()) / cell_height;
-  if (0 <= row && row < RecognizerSettings::height() &&
-      0 <= col && col < RecognizerSettings::width()) {
+  if (0 <= row && row < RecognizerSettings::NeuronHeight() &&
+      0 <= col && col < RecognizerSettings::NeuronWidth()) {
     builder->set_color(row, col, event->buttons() != Qt::RightButton/* ? 1 : 0*/);
     int radius = RecognizerSettings::PenRadius();
     int radius_sq = radius*radius;
     for(int dx = -radius; dx <= radius; ++dx)
       for(int dy = -radius; dy <= radius; ++dy)
         if (dx*dx + dy*dy < radius_sq)
-          if (0 <= row + dy && row + dy < RecognizerSettings::height() &&
-              0 <= col + dx && col + dx < RecognizerSettings::width())
+          if (0 <= row + dy && row + dy < RecognizerSettings::NeuronHeight() &&
+              0 <= col + dx && col + dx < RecognizerSettings::NeuronWidth())
             builder->set_color(row + dy, col + dx,
                                event->buttons() != Qt::RightButton ?
                   min(256*(radius_sq - (dx*dx + dy*dy))/radius_sq, 256) : 0);
@@ -56,6 +56,10 @@ void CVisualWorkInterface::mouseEvent(QMouseEvent *event) {
 }
 
 
-IPixelMatrix* CVisualWorkInterface::make_pixel_matrix() {
+IPixelMatrix* CVisualWorkInterface::make_pixel_matrix() const {
   return builder->build();
+}
+
+void CVisualWorkInterface::clear() {
+  builder->clear();
 }

@@ -17,25 +17,38 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     cdigitneuron.cpp \
     cpixelmatrix.cpp \
-    cweightsreader.cpp \
-    cweightswriter.cpp \
     cdigitrecognizer.cpp \
     cworkinterface.cpp \
     cpixelmatrixbuilder.cpp \
-    cviewinterface.cpp
+    cviewinterface.cpp \
+    libs/nightcharts.cpp \
+    drawpad.cpp \
+    histogramview.cpp \
+    cdigitneuronreader.cpp \
+    cdigitneuronbuilder.cpp \
+    cxmlwriter.cpp \
+    cmessageshower.cpp \
+    cpixelmatrixreader.cpp \
+    cxmlparser.cpp
 
 HEADERS  += mainwindow.h \
     cdigitneuron.h \
     cpixelmatrix.h \
     settings.h \
-    cweightsreader.h \
-    cweightswriter.h \
     iserializable.h \
-    ivisitable.h \
     cdigitrecognizer.h \
     cworkinterface.h \
     cpixelmatrixbuilder.h \
-    cviewinterface.h
+    cviewinterface.h \
+    libs/nightcharts.h \
+    drawpad.h \
+    histogramview.h \
+    cdigitneuronreader.h \
+    cdigitneuronbuilder.h \
+    cxmlwriter.h \
+    cmessageshower.h \
+    cpixelmatrixreader.h \
+    cxmlparser.h
 
 FORMS    += mainwindow.ui
 
