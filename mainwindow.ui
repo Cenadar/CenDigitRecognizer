@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1109</width>
-    <height>702</height>
+    <width>766</width>
+    <height>512</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -32,8 +32,8 @@
      <rect>
       <x>30</x>
       <y>60</y>
-      <width>431</width>
-      <height>381</height>
+      <width>251</width>
+      <height>191</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -46,9 +46,9 @@
    <widget class="HistogramView" name="HistogramViewWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>490</x>
+      <x>370</x>
       <y>60</y>
-      <width>261</width>
+      <width>271</width>
       <height>381</height>
      </rect>
     </property>
@@ -56,8 +56,8 @@
    <widget class="QPushButton" name="RecognizeButton">
     <property name="geometry">
      <rect>
-      <x>240</x>
-      <y>440</y>
+      <x>200</x>
+      <y>260</y>
       <width>101</width>
       <height>24</height>
      </rect>
@@ -69,8 +69,8 @@
    <widget class="QGroupBox" name="DigitRadioBox">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>470</y>
+      <x>30</x>
+      <y>290</y>
       <width>311</width>
       <height>151</height>
      </rect>
@@ -85,8 +85,8 @@
    <widget class="QPushButton" name="ClearDrawButton">
     <property name="geometry">
      <rect>
-      <x>100</x>
-      <y>440</y>
+      <x>60</x>
+      <y>260</y>
       <width>101</width>
       <height>24</height>
      </rect>
@@ -98,8 +98,8 @@
    <widget class="QPushButton" name="TeachButton">
     <property name="geometry">
      <rect>
-      <x>170</x>
-      <y>620</y>
+      <x>130</x>
+      <y>440</y>
       <width>101</width>
       <height>24</height>
      </rect>
@@ -108,38 +108,13 @@
      <string>Teach</string>
     </property>
    </widget>
-   <widget class="QProgressBar" name="progressBar">
-    <property name="enabled">
-     <bool>true</bool>
-    </property>
-    <property name="geometry">
-     <rect>
-      <x>340</x>
-      <y>10</y>
-      <width>351</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="maximum">
-     <number>100</number>
-    </property>
-    <property name="textVisible">
-     <bool>true</bool>
-    </property>
-    <property name="orientation">
-     <enum>Qt::Horizontal</enum>
-    </property>
-    <property name="format">
-     <string>%p%</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1109</width>
+     <width>766</width>
      <height>21</height>
     </rect>
    </property>

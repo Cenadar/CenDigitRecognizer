@@ -12,7 +12,7 @@ void CViewInterface::paint(QVector<TSignal> sign) {
   PieChart.setType(Nightcharts::Histogramm);//{Histogramm,Pie,DPie};
   PieChart.setLegendType(Nightcharts::Vertical);//{Round,Vertical}
   PieChart.setCords(base_corner.x(), base_corner.y(),
-                    width, height);  
+                    width, height);
 
   assert(sign.size() == 10);
   TSignal sum = 0;
@@ -23,8 +23,9 @@ void CViewInterface::paint(QVector<TSignal> sign) {
   }
 
   for(int i = 0; i < 10; ++i) {
-    PieChart.addPiece("Digit " + QString::number(i),
-                      QColor(200, (10 - i)*15, (10 - i)*15),
+    int v = (10 - i)%5*30 + 50;
+    PieChart.addPiece("Digit " + QString::number(i),                      
+                      QColor(v, 200, v),
                       int(sign[i] * 100.0 / double(sum) + 0.5));
   }  
   PieChart.draw(&painter);

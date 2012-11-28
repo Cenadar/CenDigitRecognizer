@@ -22,9 +22,10 @@ MainWindow::MainWindow(QWidget *parent):
                                             RecognizerSettings::CellWidth(),
                                             new CPixelMatrixBuilder);
 
-  view_interface = new CViewInterface(ui->HistogramViewWidget->geometry().topLeft(),
-                                      RecognizerSettings::DiagramHeight(),
-                                      RecognizerSettings::DiagramWidth(), this, this);
+  view_interface = new CViewInterface(
+        ui->HistogramViewWidget->geometry().topLeft(),
+        ui->HistogramViewWidget->geometry().height(),
+        ui->HistogramViewWidget->geometry().width(), this, this);
   recognizer = new CDigitRecognizer();
 
   // creating radio group
@@ -88,9 +89,6 @@ void MainWindow::on_actionExit_triggered() {
 
 
 void MainWindow::on_actionLoad_triggered() {  
-  ui->progressBar->setVisible(true);
-  ui->progressBar->setValue(0);
-
   QTimer *timer = new QTimer(this);
   connect(timer, SIGNAL(timeout()), this, SLOT(procEvents()));
   timer->setInterval(40);
@@ -115,11 +113,9 @@ void MainWindow::on_actionLoad_triggered() {
     if (reader != NULL) delete reader;
 
     qDebug() << "Done!";
-    ui->progressBar->setValue(10*i);
   }
 
   delete timer;
-  ui->progressBar->setVisible(false);
 
   qDebug() << "Loaded";
 }

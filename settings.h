@@ -8,7 +8,7 @@ typedef double TSignal;
 
 class RecognizerSettings {
  public:
-  static int NeuronHeight() {return 60;}
+  static int NeuronHeight() {return 30;}
   static int NeuronWidth() {return 30;}
 
   static int CellHeight() {return 6;}
@@ -21,7 +21,7 @@ class RecognizerSettings {
   static int DiagramHeight() {return 400;}
 
   static int NeuronTeachCorrectModifier() {return +5;}
-  static int NeuronTeachIncorrectModifier() {return -1;}
+  static int NeuronTeachIncorrectModifier() {return 0;}
 
   static const QString default_weights_dir() {return "weights";}
 };
