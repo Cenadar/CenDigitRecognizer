@@ -3,17 +3,21 @@
 #include <cmath>
 
 TSignal CDigitNeuron::get_output(IPixelMatrix *input) const {
-  TSignal output = 0;  
+  TSignal output = 0, total = 0;
 
   for(int row = 0; row < RecognizerSettings::NeuronHeight(); ++row)
     for(int col = 0; col < RecognizerSettings::NeuronWidth(); ++col) {
-      TSignal add = weight[row][col] * pow(abs(input->get_signal(row, col)), 0.5);
-      if (input->get_signal(row, col) < 1e-9) add = -add;
+      TSignal add = input->get_signal(row, col) * pow(abs(weight[row][col]), 0.5);
+      if (weight[row][col] < 1e-9) add = -add;
       output += add;
+      total += abs(weight[row][col]);
     }
 
-  if (output < 0) return 0;
-  return output;
+  if (output < 1e-9) {
+    return 0;
+  } else {
+    return output/total;
+  }
 }
 
 
@@ -58,4 +62,9 @@ QDomElement CDigitNeuron::serialize(QDomDocument &document) const {
     }
 
   return result;
+}
+
+
+int CDigitNeuron::getCoefficient(int row, int col) {
+  return weight[row][col];
 }

@@ -14,16 +14,30 @@ class RecognizerSettings {
   static int CellHeight() {return 6;}
   static int CellWidth() {return 6;}
 
-  static int PenRadius() {return 5;}
+  static int PenRadiusSq() {return 20;}
   static int FPS() {return 20;}
 
-  static int DiagramWidth() {return 300;}
-  static int DiagramHeight() {return 400;}
+  static int NeuronTeachCorrectModifier() {return +20;}
+  static int NeuronTeachIncorrectModifier() {return -1;}
 
-  static int NeuronTeachCorrectModifier() {return +5;}
-  static int NeuronTeachIncorrectModifier() {return 0;}
+  static bool useLinearSmoothingForPixelMatrix() {return true;}
 
   static const QString default_weights_dir() {return "weights";}
 };
+
+
+/*class RecognizerMessages {
+ public:
+  static const QString& IncorrectExampleHeight() {return IncorrectExampleHeight_;}
+  static const QString& IncorrectExampleWidth() {return IncorrectExampleWidth_;}
+  static const QString& IncorrectNeuronHeight() {return IncorrectNeuronHeight_;}
+  static const QString& IncorrectNeuronWidth() {return IncorrectNeuronWidth_;}
+ private:
+  static const QString IncorrectExampleHeight_;
+  static const QString IncorrectExampleWidth_;
+  static const QString IncorrectNeuronHeight_;
+  static const QString IncorrectNeuronWidth_;
+};
+*/
 
 #endif // SETTINGS_H

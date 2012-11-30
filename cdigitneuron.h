@@ -1,8 +1,11 @@
 #ifndef CDIGITNEURON_H
 #define CDIGITNEURON_H
 
+class IDigitNeuron;
+
 #include "cpixelmatrix.h"
 #include "iserializable.h"
+#include "cneuronpainter.h"
 
 using namespace std;
 
@@ -12,6 +15,10 @@ class IDigitNeuron: public ISerializable {
 
   virtual TSignal get_output(IPixelMatrix *input) const = 0;
   virtual void teach(IPixelMatrix *input, bool correctness) = 0;
+
+  friend class CNeuronPainter;
+ private:
+  virtual int getCoefficient(int row, int col) = 0;
 };
 
 
@@ -25,6 +32,8 @@ class CDigitNeuron: public IDigitNeuron {
 
   QDomElement serialize(QDomDocument &document) const;
  private:
+  int getCoefficient(int row, int col);
+
   QVector<QVector<int> > weight;
 };
 

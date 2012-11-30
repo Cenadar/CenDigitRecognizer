@@ -1,7 +1,6 @@
 #include "cpixelmatrix.h"
 #include "settings.h"
-
-#include "cassert"
+#include <cassert>
 
 CPixelMatrix::CPixelMatrix(QVector<QVector<TColor> > matrix_): matrix(matrix_) {
   assert(matrix.size() == RecognizerSettings::NeuronHeight());
@@ -12,7 +11,11 @@ CPixelMatrix::CPixelMatrix(QVector<QVector<TColor> > matrix_): matrix(matrix_) {
 
 
 TSignal CPixelMatrix::get_signal(int row, int col) const {
-  return matrix[row][col] > 0 ? 1 : -1;
+  if (RecognizerSettings::useLinearSmoothingForPixelMatrix()) {
+    return matrix[row][col] > 0 ? matrix[row][col] : -10;
+  } else {
+    return matrix[row][col] > 0 ? 1 : -1;
+  }
 }
 
 

@@ -9,9 +9,9 @@ class IWorkInterface {
  public:
   virtual ~IWorkInterface() {}
 
-  virtual void paintEvent(QPaintEvent *event, QPaintDevice *device,
-                          const QPalette &palette) = 0;
-  virtual void mouseEvent(QMouseEvent *event) = 0;
+  virtual void paintEvent(QPaintEvent* event, QPaintDevice* device,
+                          const QPalette& palette) = 0;
+  virtual void mouseEvent(QMouseEvent* event) = 0;
   virtual IPixelMatrix* make_pixel_matrix() const = 0;
   virtual void clear() = 0;
 };

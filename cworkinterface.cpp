@@ -17,9 +17,9 @@ void CVisualWorkInterface::paintEvent(QPaintEvent* /*event*/,
   painter.setPen(Qt::darkGreen);
   for(int row = 0; row < RecognizerSettings::NeuronHeight(); ++row)
     for(int col = 0; col < RecognizerSettings::NeuronWidth(); ++col) {
-      if (builder->get_color(row, col) >= 192) // TODO formalize constants
+      if (builder->get_color(row, col) >= 160) // TODO formalize constants
         painter.setBrush(Qt::darkGreen);
-      else if (builder->get_color(row, col) >= 128)
+      else if (builder->get_color(row, col) >= 96)
         painter.setBrush(Qt::darkGray);
       else if (builder->get_color(row, col) >= 48)
         painter.setBrush(Qt::gray);
@@ -38,19 +38,20 @@ void CVisualWorkInterface::paintEvent(QPaintEvent* /*event*/,
 void CVisualWorkInterface::mouseEvent(QMouseEvent *event) {
   int col = (event->x() - base_corner.x()) / cell_width;
   int row = (event->y() - base_corner.y()) / cell_height;
+  int radiusSq = RecognizerSettings::PenRadiusSq();
+  int radius = 0;
+  while(radius*radius < radiusSq) ++radius;
   if (0 <= row && row < RecognizerSettings::NeuronHeight() &&
       0 <= col && col < RecognizerSettings::NeuronWidth()) {
     builder->set_color(row, col, event->buttons() != Qt::RightButton/* ? 1 : 0*/);
-    int radius = RecognizerSettings::PenRadius();
-    int radius_sq = radius*radius;
     for(int dx = -radius; dx <= radius; ++dx)
       for(int dy = -radius; dy <= radius; ++dy)
-        if (dx*dx + dy*dy < radius_sq)
+        if (dx*dx + dy*dy < radiusSq)
           if (0 <= row + dy && row + dy < RecognizerSettings::NeuronHeight() &&
               0 <= col + dx && col + dx < RecognizerSettings::NeuronWidth())
             builder->set_color(row + dy, col + dx,
                                event->buttons() != Qt::RightButton ?
-                  min(256*(radius_sq - (dx*dx + dy*dy))/radius_sq, 256) : 0);
+                  min(256*(radiusSq - (dx*dx + dy*dy))/radiusSq, 256) : 0);
     // TODO: Solve problem with Qt::LeftButton and KDE moving.
   }
 }

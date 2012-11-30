@@ -27,10 +27,13 @@ private slots:
   void on_actionErase_neurons_triggered();
   void on_SaveXMLButton_clicked();
   void procEvents();
-  void on_actionTeach_from_base_triggered();
+  void on_actionShow_neurons_triggered();
+  void on_actionFiles_triggered();
+  void on_actionBase_directory_triggered();
 
 private:
   QString find_next_name(int digit);
+  void teachFromFiles(QStringList examples, int digit, bool shoeMessage = true);
 
   void paintEvent(QPaintEvent *event);
   void mousePressEvent(QMouseEvent *event);

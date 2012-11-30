@@ -29,7 +29,10 @@ SOURCES += main.cpp\
     cxmlwriter.cpp \
     cmessageshower.cpp \
     cpixelmatrixreader.cpp \
-    cxmlparser.cpp
+    cxmlparser.cpp \
+    settings.cpp \
+    neurondisplay.cpp \
+    cneuronpainter.cpp
 
 HEADERS  += mainwindow.h \
     cdigitneuron.h \
@@ -48,9 +51,12 @@ HEADERS  += mainwindow.h \
     cxmlwriter.h \
     cmessageshower.h \
     cpixelmatrixreader.h \
-    cxmlparser.h
+    cxmlparser.h \
+    neurondisplay.h \
+    cneuronpainter.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    neurondisplay.ui
 
 OTHER_FILES += \
     README.md

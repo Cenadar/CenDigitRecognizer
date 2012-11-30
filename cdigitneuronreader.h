@@ -5,6 +5,7 @@
 #include <QtCore>
 #include "cdigitneuron.h"
 #include "cdigitneuronbuilder.h"
+#include "cxmlparser.h"
 
 class IDigitNeuronReader {
  public:
@@ -14,16 +15,13 @@ class IDigitNeuronReader {
 };
 
 
-class CFileDigitNeuronReader: public IDigitNeuronReader {
+class CDigitNeuronReader: public IDigitNeuronReader {
  public:
-  CFileDigitNeuronReader(QString file_name_): file_name(file_name_) {}
+  CDigitNeuronReader(IXMLParser* parser_): parser(parser_) {}
 
   IDigitNeuron* read();
  private:
-  QDomElement find_first_element(QDomElement root, QString tagname,
-                                 QMap<QString, QString> attr);
-
-  QString file_name;  
+  IXMLParser* parser;
 };
 
 

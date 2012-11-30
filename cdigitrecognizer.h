@@ -12,6 +12,7 @@ class IDigitRecognizer {
   virtual void set_neuron(int digit, IDigitNeuronReader* reader) = 0;
   virtual void teach(IPixelMatrix* image, int digit) = 0;
   virtual IDigitNeuron* get_neuron(int digit) = 0;
+  virtual QVector<IDigitNeuron*> get_neurons() = 0;
 };
 
 
@@ -24,6 +25,7 @@ class CDigitRecognizer: public IDigitRecognizer {
   void set_neuron(int digit, IDigitNeuronReader* reader);
   void teach(IPixelMatrix* image, int digit);
   IDigitNeuron* get_neuron(int digit);
+  QVector<IDigitNeuron*> get_neurons();
  private:
   QVector<IDigitNeuron*> neurons;
 };

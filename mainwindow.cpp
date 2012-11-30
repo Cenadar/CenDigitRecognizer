@@ -5,9 +5,11 @@
 #include <QTime>
 #include "cxmlwriter.h"
 #include "cdigitneuron.h"
+#include "cdigitneuronreader.h"
 #include "cdigitneuronbuilder.h"
 #include "cpixelmatrixreader.h"
 #include "cxmlparser.h"
+#include "neurondisplay.h"
 #include <cassert>
 
 MainWindow::MainWindow(QWidget *parent):
@@ -57,10 +59,19 @@ MainWindow::~MainWindow() {
 }
 
 
-void MainWindow::paintEvent(QPaintEvent *event) {
+void MainWindow::paintEvent(QPaintEvent* event) {
   work_interface->paintEvent(event, this, this->palette());
   view_interface->paint(last_recognition);
-  //qDebug() << QTime::currentTime().toString("hh:mm:ss::zzz") << "painted";
+
+  int highest = -1;
+  for(int digit = 0; digit < 10; ++digit) {
+    if (highest == -1 || last_recognition[highest] < last_recognition[digit])
+      highest = digit;
+  }
+  if (last_recognition[highest] > 1e-9)
+    ui->ResultLabel->setText("Result of recognition: " + QString::number(highest));
+  else
+    ui->ResultLabel->setText("No recognition");
 }
 
 
@@ -78,7 +89,6 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event) {
 
 void MainWindow::on_RecognizeButton_clicked() {
   last_recognition = recognizer->recognize(work_interface->make_pixel_matrix());
-  //view_interface->paint(last_recognition);
   repaint();
 }
 
@@ -94,23 +104,25 @@ void MainWindow::on_actionLoad_triggered() {
   timer->setInterval(40);
   timer->start();
 
-  IDigitNeuronReader* reader;  
+  IXMLParser* parser;
+  IDigitNeuronReader* reader;
   for(int i = 0; i < 10; ++i) {
     qDebug() << "Loading neuron " + QString::number(i);
 
     try {
-      reader = new CFileDigitNeuronReader("weights/Neuron" +
-                                          QString::number(i) + ".xml");
+      parser = new CFileXMLParser("weights/Neuron" +
+                                     QString::number(i) + ".xml");
+      reader = new CDigitNeuronReader(parser);
       try {
         recognizer->set_neuron(i, reader);
       } catch (QString message) {
         messager->show_message(message);
       }
+      delete reader;
+      delete parser;
     } catch (QString message) {
       messager->show_message(message);
     }
-
-    if (reader != NULL) delete reader;
 
     qDebug() << "Done!";
   }
@@ -184,7 +196,7 @@ void MainWindow::on_actionErase_neurons_triggered() {
     qDebug() << i;
     recognizer->set_neuron(i, empty_reader);
   }
-  qDebug() << "Erased";
+  qDebug() << "Erased!";
   delete empty_reader;
 }
 
@@ -207,7 +219,13 @@ void MainWindow::on_SaveXMLButton_clicked() {
 }
 
 
-void MainWindow::on_actionTeach_from_base_triggered() {
+void MainWindow::on_actionShow_neurons_triggered() {
+  NeuronDisplay display(this, recognizer->get_neurons());
+  display.exec();
+}
+
+
+void MainWindow::on_actionFiles_triggered() {
   bool ok;
   int digit = QInputDialog::getInt(this, tr("Digit to teach"),
                                    tr("What digit to teach"), 0, 0, 9, 1, &ok);
@@ -216,6 +234,57 @@ void MainWindow::on_actionTeach_from_base_triggered() {
   QStringList examples = QFileDialog::getOpenFileNames(
         this, tr("Open File for teachings"), "base/" + QString::number(digit),
         tr("Files (*.xml)"));
+
+  teachFromFiles(examples, digit);
+}
+
+
+void MainWindow::on_actionBase_directory_triggered() {
+  bool ok = true;
+  QString examplesDirectory = QFileDialog::getExistingDirectory(
+      this, tr("Open base for teachings"));
+  if (!ok) return;
+
+  QStringList examples[10];
+  for(int digit = 0; digit < 10; ++digit) {
+    try {
+      QDir dir(examplesDirectory + "/" + QString::number(digit));
+      if (dir.exists()) {
+        QStringList filters;
+        filters << "*.xml";
+        examples[digit] = dir.entryList(filters, QDir::Files);
+      }
+
+      for(QStringList::Iterator file = examples[digit].begin(); file != examples[digit].end();
+          ++file) {
+        *file = examplesDirectory + "/" + QString::number(digit) + "/" + *file;
+      }
+    } catch(QString message) {
+      messager->show_message(message);
+    }
+  }
+  QString baseInfo;
+  for(int digit = 0; digit < 10; ++digit) {
+    baseInfo += QString::number(digit) + " have " +
+        QString::number(examples[digit].size()) + " examples\n";
+  }
+  if (QMessageBox::information(
+      this, "Teachings", "Teach these base?\n" + baseInfo,
+      QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
+    for(int digit = 0; digit < 10; ++digit) {
+      try {
+        teachFromFiles(examples[digit], digit, false);
+      } catch(QString message) {
+        messager->show_message(message);
+      }
+    }
+  }
+  messager->show_message("Done teaching from base");
+}
+
+
+void MainWindow::teachFromFiles(QStringList examples, int digit,
+                                bool showMessage) {
   if (examples.empty()) return;
 
   QString message = "Examples \n";
@@ -226,5 +295,5 @@ void MainWindow::on_actionTeach_from_base_triggered() {
     delete reader;
   }
   message += "successfully teached.";
-  messager->show_message(message);
+  if (showMessage) messager->show_message(message);
 }

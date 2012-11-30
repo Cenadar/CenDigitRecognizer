@@ -44,3 +44,8 @@ IDigitNeuron* CDigitRecognizer::get_neuron(int digit) {
   assert(0 <= digit && digit < 10);
   return neurons[digit];
 }
+
+
+QVector<IDigitNeuron*> CDigitRecognizer::get_neurons() {
+  return neurons;
+}
