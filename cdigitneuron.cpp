@@ -2,12 +2,12 @@
 #include "settings.h"
 #include <cmath>
 
-TSignal CDigitNeuron::get_output(IPixelMatrix *input) const {
+TSignal CDigitNeuron::getOutput(IPixelMatrix *input) const {
   TSignal output = 0, total = 0;
 
-  for(int row = 0; row < RecognizerSettings::NeuronHeight(); ++row)
-    for(int col = 0; col < RecognizerSettings::NeuronWidth(); ++col) {
-      TSignal add = input->get_signal(row, col) * pow(abs(weight[row][col]), 0.5);
+  for(int row = 0; row < RSettings::neuronHeight(); ++row)
+    for(int col = 0; col < RSettings::neuronWidth(); ++col) {
+      TSignal add = input->getSignal(row, col) * pow(abs(weight[row][col]), 0.5);
       if (weight[row][col] < 1e-9) add = -add;
       output += add;
       total += abs(weight[row][col]);
@@ -24,13 +24,13 @@ TSignal CDigitNeuron::get_output(IPixelMatrix *input) const {
 void CDigitNeuron::teach(IPixelMatrix *input, bool correctness) {
   int modifier;
   if (correctness)
-    modifier = RecognizerSettings::NeuronTeachCorrectModifier();
+    modifier = RSettings::neuronTeachCorrectModifier();
   else
-    modifier = RecognizerSettings::NeuronTeachIncorrectModifier();
+    modifier = RSettings::neuronTeachIncorrectModifier();
 
-  for(int row = 0; row < RecognizerSettings::NeuronHeight(); ++row)
-    for(int col = 0; col < RecognizerSettings::NeuronWidth(); ++col)
-      weight[row][col] += modifier*input->get_signal(row, col);
+  for(int row = 0; row < RSettings::neuronHeight(); ++row)
+    for(int col = 0; col < RSettings::neuronWidth(); ++col)
+      weight[row][col] += modifier*input->getSignal(row, col);
 }
 
 
@@ -41,13 +41,13 @@ QDomElement CDigitNeuron::serialize(QDomDocument &document) const {
   QDomText text;
   elem = document.createElement("Height");
   text = document.createTextNode(
-        QString::number(RecognizerSettings::NeuronHeight()));
+        QString::number(RSettings::neuronHeight()));
   elem.appendChild(text);
   result.appendChild(elem);
 
   elem = document.createElement("Width");
   text = document.createTextNode(
-        QString::number(RecognizerSettings::NeuronWidth()));
+        QString::number(RSettings::neuronWidth()));
   elem.appendChild(text);
   result.appendChild(elem);
 

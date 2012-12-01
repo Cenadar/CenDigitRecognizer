@@ -40,13 +40,13 @@ private:
   void mouseMoveEvent(QMouseEvent *event);
 
   Ui::MainWindow* ui;
-  IWorkInterface* work_interface;
-  IViewInterface* view_interface;
+  IWorkInterface* paintingInterface;
+  IViewInterface* resultsInterface;
   IDigitRecognizer* recognizer;
   IMessageShower* messager;
   QRadioButton* digitRadioButtons[10];
 
-  QVector<TSignal> last_recognition;
+  QVector<TSignal> lastRecognition;
 };
 
 #endif // MAINWINDOW_H

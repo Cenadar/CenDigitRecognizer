@@ -6,38 +6,40 @@
 typedef int TColor;
 typedef double TSignal;
 
-class RecognizerSettings {
+class RSettings {
  public:
-  static int NeuronHeight() {return 30;}
-  static int NeuronWidth() {return 30;}
+  static int neuronHeight() {return 30;}
+  static int neuronWidth() {return 30;}
 
-  static int CellHeight() {return 6;}
-  static int CellWidth() {return 6;}
+  static int cellHeight() {return 6;}
+  static int cellWidth() {return 6;}
 
-  static int PenRadiusSq() {return 20;}
+  static int penRadiusSq() {return 20;}
   static int FPS() {return 20;}
 
-  static int NeuronTeachCorrectModifier() {return +20;}
-  static int NeuronTeachIncorrectModifier() {return -1;}
+  static int neuronTeachCorrectModifier() {return +20;}
+  static int neuronTeachIncorrectModifier() {return -1;}
 
   static bool useLinearSmoothingForPixelMatrix() {return true;}
 
-  static const QString default_weights_dir() {return "weights";}
+  static const QString neuronsDir() {return "neurons";}
+  static const QString databaseDir() {return "base";}
+  static const QString tesingDir() {return "tests";}
 };
 
 
-/*class RecognizerMessages {
+/*class RMessages {
  public:
-  static const QString& IncorrectExampleHeight() {return IncorrectExampleHeight_;}
-  static const QString& IncorrectExampleWidth() {return IncorrectExampleWidth_;}
-  static const QString& IncorrectNeuronHeight() {return IncorrectNeuronHeight_;}
-  static const QString& IncorrectNeuronWidth() {return IncorrectNeuronWidth_;}
+  static const QString& incorrectExampleHeight() {return incorrectExampleHeight_;}
+  static const QString& incorrectExampleWidth() {return incorrectExampleWidth_;}
+  static const QString& incorrectNeuronHeight() {return incorrectNeuronHeight_;}
+  static const QString& incorrectNeuronWidth() {return incorrectNeuronWidth_;}
  private:
-  static const QString IncorrectExampleHeight_;
-  static const QString IncorrectExampleWidth_;
-  static const QString IncorrectNeuronHeight_;
-  static const QString IncorrectNeuronWidth_;
-};
-*/
+  static const QString incorrectExampleHeight_;
+  static const QString incorrectExampleWidth_;
+  static const QString incorrectNeuronHeight_;
+  static const QString incorrectNeuronWidth_;
+};*/
+
 
 #endif // SETTINGS_H

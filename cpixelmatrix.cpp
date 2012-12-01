@@ -3,15 +3,15 @@
 #include <cassert>
 
 CPixelMatrix::CPixelMatrix(QVector<QVector<TColor> > matrix_): matrix(matrix_) {
-  assert(matrix.size() == RecognizerSettings::NeuronHeight());
+  assert(matrix.size() == RSettings::neuronHeight());
   for(QVector<QVector<TColor> >::ConstIterator it = matrix.begin();
       it != matrix.end(); ++it)
-        assert(it->size() == RecognizerSettings::NeuronWidth());
+        assert(it->size() == RSettings::neuronWidth());
 }
 
 
-TSignal CPixelMatrix::get_signal(int row, int col) const {
-  if (RecognizerSettings::useLinearSmoothingForPixelMatrix()) {
+TSignal CPixelMatrix::getSignal(int row, int col) const {
+  if (RSettings::useLinearSmoothingForPixelMatrix()) {
     return matrix[row][col] > 0 ? matrix[row][col] : -10;
   } else {
     return matrix[row][col] > 0 ? 1 : -1;
@@ -26,13 +26,13 @@ QDomElement CPixelMatrix::serialize(QDomDocument& document) const {
   QDomText text;
   elem = document.createElement("Height");
   text = document.createTextNode(
-        QString::number(RecognizerSettings::NeuronHeight()));
+        QString::number(RSettings::neuronHeight()));
   elem.appendChild(text);
   result.appendChild(elem);
 
   elem = document.createElement("Width");
   text = document.createTextNode(
-        QString::number(RecognizerSettings::NeuronWidth()));
+        QString::number(RSettings::neuronWidth()));
   elem.appendChild(text);
   result.appendChild(elem);
 

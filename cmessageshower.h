@@ -8,12 +8,12 @@ class IMessageShower {
  public:
   virtual ~IMessageShower() {}
 
-  virtual void show_message(const QString &message) = 0;
+  virtual void showMessage(const QString &message) = 0;
 };
 
 
 class CVisualMessageShower: public IMessageShower {
-  virtual void show_message(const QString &message);
+  virtual void showMessage(const QString &message);
 };
 
 #endif // CMESSAGESHOWER_H

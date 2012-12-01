@@ -1,12 +1,12 @@
 #include "cdigitneuronbuilder.h"
 
 CDigitNeuronBuilder::CDigitNeuronBuilder() {
-  weight.fill(QVector<int>(RecognizerSettings::NeuronWidth(), 0),
-              RecognizerSettings::NeuronHeight());
+  weight.fill(QVector<int>(RSettings::neuronWidth(), 0),
+              RSettings::neuronHeight());
 }
 
 
-void CDigitNeuronBuilder::set_value(int row, int col, int value) {
+void CDigitNeuronBuilder::setValue(int row, int col, int value) {
   weight[row][col] = value;
 }
 

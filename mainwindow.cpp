@@ -15,19 +15,19 @@
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    messager(new CVisualMessageShower)
-     {
+    messager(new CVisualMessageShower) {
   ui->setupUi(this);
 
-  work_interface = new CVisualWorkInterface(ui->DrawPadWidget->geometry().topLeft(),
-                                            RecognizerSettings::CellHeight(),
-                                            RecognizerSettings::CellWidth(),
+  paintingInterface = new CVisualWorkInterface(ui->DrawPadWidget->geometry().topLeft(),
+                                            RSettings::cellHeight(),
+                                            RSettings::cellWidth(),
                                             new CPixelMatrixBuilder);
 
-  view_interface = new CViewInterface(
+  resultsInterface = new CViewInterface(
         ui->HistogramViewWidget->geometry().topLeft(),
         ui->HistogramViewWidget->geometry().height(),
         ui->HistogramViewWidget->geometry().width(), this, this);
+
   recognizer = new CDigitRecognizer();
 
   // creating radio group
@@ -46,29 +46,30 @@ MainWindow::MainWindow(QWidget *parent):
   this->setPalette(palette);
 
   //
-  last_recognition.fill(0, 10);
+  lastRecognition.fill(0, 10);
 }
 
 
 MainWindow::~MainWindow() {
   delete ui;
-  delete work_interface;
-  delete view_interface;
+  delete paintingInterface;
+  delete resultsInterface;
   delete recognizer;
   delete messager;
 }
 
 
 void MainWindow::paintEvent(QPaintEvent* event) {
-  work_interface->paintEvent(event, this, this->palette());
-  view_interface->paint(last_recognition);
+  paintingInterface->paintEvent(event, this, this->palette());
+  resultsInterface->paint(lastRecognition);
 
+  assert(lastRecognition.size() == 10);
   int highest = -1;
   for(int digit = 0; digit < 10; ++digit) {
-    if (highest == -1 || last_recognition[highest] < last_recognition[digit])
+    if (highest == -1 || lastRecognition[highest] < lastRecognition[digit])
       highest = digit;
   }
-  if (last_recognition[highest] > 1e-9)
+  if (lastRecognition[highest] > 1e-9)
     ui->ResultLabel->setText("Result of recognition: " + QString::number(highest));
   else
     ui->ResultLabel->setText("No recognition");
@@ -76,19 +77,20 @@ void MainWindow::paintEvent(QPaintEvent* event) {
 
 
 void MainWindow::mousePressEvent(QMouseEvent *event) {  
-  work_interface->mouseEvent(event);
+  paintingInterface->mouseEvent(event);
   repaint();
 }
 
 
 void MainWindow::mouseMoveEvent(QMouseEvent *event) {
-  work_interface->mouseEvent(event);
+  paintingInterface->mouseEvent(event);
   repaint();
 }
 
 
 void MainWindow::on_RecognizeButton_clicked() {
-  last_recognition = recognizer->recognize(work_interface->make_pixel_matrix());
+  lastRecognition = recognizer->recognize(paintingInterface->makePixelMatrix());
+  assert(lastRecognition.size() == 10);
   repaint();
 }
 
@@ -110,18 +112,18 @@ void MainWindow::on_actionLoad_triggered() {
     qDebug() << "Loading neuron " + QString::number(i);
 
     try {
-      parser = new CFileXMLParser("weights/Neuron" +
+      parser = new CFileXMLParser(RSettings::neuronsDir() + "/Neuron" +
                                      QString::number(i) + ".xml");
       reader = new CDigitNeuronReader(parser);
       try {
-        recognizer->set_neuron(i, reader);
+        recognizer->setNeuron(i, reader);
       } catch (QString message) {
-        messager->show_message(message);
+        messager->showMessage(message);
       }
       delete reader;
       delete parser;
     } catch (QString message) {
-      messager->show_message(message);
+      messager->showMessage(message);
     }
 
     qDebug() << "Done!";
@@ -142,15 +144,15 @@ void MainWindow::on_TeachButton_clicked() {
     }
 
   if (digit == -1) {
-    messager->show_message("Select digit, please.");
+    messager->showMessage("Select digit, please.");
     return;
   }
 
-  IPixelMatrix* image = work_interface->make_pixel_matrix();
+  IPixelMatrix* image = paintingInterface->makePixelMatrix();
   try {
     recognizer->teach(image, digit);
   } catch(QString message) {
-    messager->show_message(message);
+    messager->showMessage(message);
   }
 
   QString next_free_name = find_next_name(digit);
@@ -158,7 +160,7 @@ void MainWindow::on_TeachButton_clicked() {
   try {
     writer->write(image);
   } catch(QString message) {
-    messager->show_message(message);
+    messager->showMessage(message);
   }
   delete writer;
   delete image;
@@ -168,7 +170,7 @@ void MainWindow::on_TeachButton_clicked() {
 
 
 QString MainWindow::find_next_name(int digit) {
-  QString path = "base/" + QString::number(digit) + "/example";
+  QString path = RSettings::databaseDir() + "/" + QString::number(digit) + "/example";
   for(int i = 0; ; ++i) {
     QString name = QString::number(i);
     while(name.size() < 5) name = "0" + name;
@@ -179,7 +181,7 @@ QString MainWindow::find_next_name(int digit) {
 
 
 void MainWindow::on_ClearDrawButton_clicked() {
-  work_interface->clear();
+  paintingInterface->clear();
   repaint();
 }
 
@@ -194,7 +196,7 @@ void MainWindow::on_actionErase_neurons_triggered() {
   IDigitNeuronReader* empty_reader = new CEmptyDigitNeuronReader;
   for(int i = 0; i < 10; ++i) {
     qDebug() << i;
-    recognizer->set_neuron(i, empty_reader);
+    recognizer->setNeuron(i, empty_reader);
   }
   qDebug() << "Erased!";
   delete empty_reader;
@@ -204,9 +206,9 @@ void MainWindow::on_actionErase_neurons_triggered() {
 void MainWindow::on_SaveXMLButton_clicked() {
   try {
     for(int i = 0; i < 10; ++i) {
-      IBaseWriter* writer = new CXMLWriter("weights/Neuron" +
+      IBaseWriter* writer = new CXMLWriter(RSettings::neuronsDir() + "/Neuron" +
                                           QString::number(i) + ".xml");
-      writer->write(recognizer->get_neuron(i));
+      writer->write(recognizer->getNeuron(i));
       delete writer;
     }
   } catch(QString message) {
@@ -220,7 +222,7 @@ void MainWindow::on_SaveXMLButton_clicked() {
 
 
 void MainWindow::on_actionShow_neurons_triggered() {
-  NeuronDisplay display(this, recognizer->get_neurons());
+  NeuronDisplay display(this, recognizer->getNeurons());
   display.exec();
 }
 
@@ -232,8 +234,8 @@ void MainWindow::on_actionFiles_triggered() {
   if (!ok) return;
 
   QStringList examples = QFileDialog::getOpenFileNames(
-        this, tr("Open File for teachings"), "base/" + QString::number(digit),
-        tr("Files (*.xml)"));
+        this, tr("Open File for teachings"), RSettings::databaseDir() + "/"
+        + QString::number(digit), tr("Files (*.xml)"));
 
   teachFromFiles(examples, digit);
 }
@@ -260,26 +262,26 @@ void MainWindow::on_actionBase_directory_triggered() {
         *file = examplesDirectory + "/" + QString::number(digit) + "/" + *file;
       }
     } catch(QString message) {
-      messager->show_message(message);
+      messager->showMessage(message);
     }
   }
-  QString baseInfo;
+  QString databaseInfo;
   for(int digit = 0; digit < 10; ++digit) {
-    baseInfo += QString::number(digit) + " have " +
+    databaseInfo += QString::number(digit) + " have " +
         QString::number(examples[digit].size()) + " examples\n";
   }
   if (QMessageBox::information(
-      this, "Teachings", "Teach these base?\n" + baseInfo,
+      this, "Teachings", "Teach these database?\n" + databaseInfo,
       QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes) {
     for(int digit = 0; digit < 10; ++digit) {
       try {
         teachFromFiles(examples[digit], digit, false);
       } catch(QString message) {
-        messager->show_message(message);
+        messager->showMessage(message);
       }
     }
   }
-  messager->show_message("Done teaching from base");
+  messager->showMessage("Done teaching from database");
 }
 
 
@@ -295,5 +297,5 @@ void MainWindow::teachFromFiles(QStringList examples, int digit,
     delete reader;
   }
   message += "successfully teached.";
-  if (showMessage) messager->show_message(message);
+  if (showMessage) messager->showMessage(message);
 }

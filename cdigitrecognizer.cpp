@@ -8,7 +8,7 @@ CDigitRecognizer::~CDigitRecognizer() {
 }
 
 
-void CDigitRecognizer::set_neuron(int digit, IDigitNeuronReader *reader) {
+void CDigitRecognizer::setNeuron(int digit, IDigitNeuronReader *reader) {
   assert(0 <= digit && digit < 10);
   if (neurons[digit] != NULL)
     delete neurons[digit];
@@ -23,7 +23,7 @@ QVector<TSignal> CDigitRecognizer::recognize(IPixelMatrix *image) {
       result[i] = 0;
     } else {
       try {
-        result[i] = neurons[i]->get_output(image);
+        result[i] = neurons[i]->getOutput(image);
       } catch (QString message) {
         result[i] = 0;
       }
@@ -40,12 +40,12 @@ void CDigitRecognizer::teach(IPixelMatrix *image, int digit) {
 }
 
 
-IDigitNeuron* CDigitRecognizer::get_neuron(int digit) {
+IDigitNeuron* CDigitRecognizer::getNeuron(int digit) {
   assert(0 <= digit && digit < 10);
   return neurons[digit];
 }
 
 
-QVector<IDigitNeuron*> CDigitRecognizer::get_neurons() {
+QVector<IDigitNeuron*> CDigitRecognizer::getNeurons() {
   return neurons;
 }

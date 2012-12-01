@@ -4,26 +4,25 @@
 #include "settings.h"
 #include "cdigitneuronbuilder.h"
 
-
 IDigitNeuron* CDigitNeuronReader::read() {
-  QDomElement root = parser->get_root("Neuron");
+  QDomElement root = parser->getRoot("Neuron");
   QDomElement elem;
 
-  elem = XMLParser::find_first_element(root, "Height");
-  if (elem.text() != QString::number(RecognizerSettings::NeuronHeight()))
+  elem = XMLParser::findFirstElement(root, "Height");
+  if (elem.text() != QString::number(RSettings::neuronHeight()))
     throw QString("Uncorrect height");
 
-  elem = XMLParser::find_first_element(root, "Width");
-  if (elem.text() != QString::number(RecognizerSettings::NeuronWidth()))
+  elem = XMLParser::findFirstElement(root, "Width");
+  if (elem.text() != QString::number(RSettings::neuronWidth()))
     throw QString("Uncorrect width");
 
   IDigitNeuronBuilder* builder = new CDigitNeuronBuilder;
-  for(int row = 0; row < RecognizerSettings::NeuronHeight(); ++row) {
-    for(int col = 0; col < RecognizerSettings::NeuronWidth(); ++col) {
-      elem = XMLParser::find_first_element(root, "SynapseR" +
+  for(int row = 0; row < RSettings::neuronHeight(); ++row) {
+    for(int col = 0; col < RSettings::neuronWidth(); ++col) {
+      elem = XMLParser::findFirstElement(root, "SynapseR" +
                                            QString::number(row) +
                                           "C" + QString::number(col));
-      builder->set_value(row, col, elem.text().toInt());
+      builder->setValue(row, col, elem.text().toInt());
     }
   }
 

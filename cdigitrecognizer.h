@@ -9,10 +9,10 @@ class IDigitRecognizer {
   virtual ~IDigitRecognizer() {}
 
   virtual QVector<TSignal> recognize(IPixelMatrix* image) = 0;
-  virtual void set_neuron(int digit, IDigitNeuronReader* reader) = 0;
+  virtual void setNeuron(int digit, IDigitNeuronReader* reader) = 0;
   virtual void teach(IPixelMatrix* image, int digit) = 0;
-  virtual IDigitNeuron* get_neuron(int digit) = 0;
-  virtual QVector<IDigitNeuron*> get_neurons() = 0;
+  virtual IDigitNeuron* getNeuron(int digit) = 0;
+  virtual QVector<IDigitNeuron*> getNeurons() = 0;
 };
 
 
@@ -22,10 +22,10 @@ class CDigitRecognizer: public IDigitRecognizer {
   ~CDigitRecognizer();
 
   QVector<TSignal> recognize(IPixelMatrix* image);
-  void set_neuron(int digit, IDigitNeuronReader* reader);
+  void setNeuron(int digit, IDigitNeuronReader* reader);
   void teach(IPixelMatrix* image, int digit);
-  IDigitNeuron* get_neuron(int digit);
-  QVector<IDigitNeuron*> get_neurons();
+  IDigitNeuron* getNeuron(int digit);
+  QVector<IDigitNeuron*> getNeurons();
  private:
   QVector<IDigitNeuron*> neurons;
 };

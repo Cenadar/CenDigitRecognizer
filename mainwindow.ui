@@ -147,13 +147,21 @@
     </property>
     <widget class="QMenu" name="menuTeach_from_base">
      <property name="title">
-      <string>Teach from base</string>
+      <string>Teach from database</string>
      </property>
      <addaction name="actionBase_directory"/>
      <addaction name="actionFiles"/>
     </widget>
+    <widget class="QMenu" name="menuTest_from_base">
+     <property name="title">
+      <string>Test from database</string>
+     </property>
+     <addaction name="actionBase_directory_2"/>
+     <addaction name="actionFiles_2"/>
+    </widget>
     <addaction name="actionLoad"/>
     <addaction name="menuTeach_from_base"/>
+    <addaction name="menuTest_from_base"/>
     <addaction name="separator"/>
     <addaction name="actionShow_neurons"/>
     <addaction name="actionErase_neurons"/>
@@ -197,6 +205,16 @@
    </property>
   </action>
   <action name="actionFiles">
+   <property name="text">
+    <string>Files</string>
+   </property>
+  </action>
+  <action name="actionBase_directory_2">
+   <property name="text">
+    <string>Base directory</string>
+   </property>
+  </action>
+  <action name="actionFiles_2">
    <property name="text">
     <string>Files</string>
    </property>

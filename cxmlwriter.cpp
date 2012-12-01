@@ -12,7 +12,7 @@ void CXMLWriter::write(ISerializable* obj) {
   QDomElement elem = obj->serialize(document);
   document.appendChild(elem);
 
-  QFile file(file_name);
+  QFile file(fileName);
 
   if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
     throw QString("Cannot open file: ") + file.fileName();

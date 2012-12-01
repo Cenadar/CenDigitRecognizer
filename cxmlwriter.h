@@ -16,12 +16,12 @@ class IBaseWriter {
 
 class CXMLWriter: public IBaseWriter {
  public:
-  CXMLWriter(const QString &file_name_):
-    file_name(file_name_) {}
+  CXMLWriter(const QString &fileName_):
+    fileName(fileName_) {}
 
   void write(ISerializable *obj);
  private:
-  QString file_name;
+  QString fileName;
 };
 
 #endif // CXMLWRITER_H

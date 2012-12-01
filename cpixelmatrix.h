@@ -11,7 +11,7 @@ class IPixelMatrix: public ISerializable {
  public:
   ~IPixelMatrix() {}
 
-  virtual TSignal get_signal(int row, int col) const = 0;
+  virtual TSignal getSignal(int row, int col) const = 0;
 };
 
 
@@ -20,7 +20,7 @@ class CPixelMatrix: public IPixelMatrix {
   CPixelMatrix(QVector<QVector<TColor> > matrix_);
   ~CPixelMatrix() {}
 
-  TSignal get_signal(int row, int col) const;
+  TSignal getSignal(int row, int col) const;
   QDomElement serialize(QDomDocument &document) const;
  private:
   QVector<QVector<TColor> > matrix;

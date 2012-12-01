@@ -10,8 +10,8 @@ void CNeuronPainter::paint(QVector<IDigitNeuron*> neurons) {
   int maxAbs = 0;
   for(QVector<IDigitNeuron*>::Iterator neuron = neurons.begin();
       neuron != neurons.end(); ++neuron) {
-    for(int row = 0; row < RecognizerSettings::NeuronHeight(); ++row)
-      for(int col = 0; col < RecognizerSettings::NeuronWidth(); ++col)
+    for(int row = 0; row < RSettings::neuronHeight(); ++row)
+      for(int col = 0; col < RSettings::neuronWidth(); ++col)
         maxAbs = max(maxAbs, abs((*neuron)->getCoefficient(row, col)));
   }
   if (maxAbs == 0) maxAbs = 1; // Empty neurons
@@ -19,14 +19,14 @@ void CNeuronPainter::paint(QVector<IDigitNeuron*> neurons) {
   QVector<QPoint> basePoints;
   for(int row = 0; row < 2; ++row)
     for(int col = 0; col < 5; ++col)
-      basePoints << QPoint(col*(RecognizerSettings::NeuronWidth()*cellWidth + 10),
-                           row*(RecognizerSettings::NeuronHeight()*cellHeight + 10));
+      basePoints << QPoint(col*(RSettings::neuronWidth()*cellWidth + 10),
+                           row*(RSettings::neuronHeight()*cellHeight + 10));
 
   QVector<QPoint>::Iterator basePoint = basePoints.begin();
   for(QVector<IDigitNeuron*>::Iterator neuron = neurons.begin();
       neuron != neurons.end(); ++neuron, ++basePoint) {
-    for(int row = 0; row < RecognizerSettings::NeuronHeight(); ++row)
-      for(int col = 0; col < RecognizerSettings::NeuronWidth(); ++col) {
+    for(int row = 0; row < RSettings::neuronHeight(); ++row)
+      for(int col = 0; col < RSettings::neuronWidth(); ++col) {
         int coefficient = (*neuron)->getCoefficient(row, col);
         bool sgnPos = coefficient > 0;
         coefficient = abs(coefficient) * 255 / maxAbs;

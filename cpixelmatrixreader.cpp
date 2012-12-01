@@ -3,26 +3,26 @@
 #include "settings.h"
 
 IPixelMatrix* CPixelMatrixReader::read() {
-  QDomElement root = parser->get_root("PixelMatrix");
-  if (XMLParser::find_first_element(root, QString("Height")).text() !=
-      QString::number(RecognizerSettings::NeuronHeight())) {
+  QDomElement root = parser->getRoot("PixelMatrix");
+  if (XMLParser::findFirstElement(root, QString("Height")).text() !=
+      QString::number(RSettings::neuronHeight())) {
     throw QString("Height is incorrect");
   }
-  if (XMLParser::find_first_element(root, QString("Width")).text() !=
-      QString::number(RecognizerSettings::NeuronWidth())) {
+  if (XMLParser::findFirstElement(root, QString("Width")).text() !=
+      QString::number(RSettings::neuronWidth())) {
     throw QString("Width is incorrect");
   }
 
   IPixelMatrixBuilder* builder = new CPixelMatrixBuilder;
-  for(int row = 0; row < RecognizerSettings::NeuronHeight(); ++row) {
-    for(int col = 0; col < RecognizerSettings::NeuronWidth(); ++col) {
+  for(int row = 0; row < RSettings::neuronHeight(); ++row) {
+    for(int col = 0; col < RSettings::neuronWidth(); ++col) {
       try {
         QString tagname = QString("PixelR") + QString::number(row) +
                           "C" + QString::number(col);
-        QDomElement elem = XMLParser::find_first_element(root, tagname);
+        QDomElement elem = XMLParser::findFirstElement(root, tagname);
 
         TColor color = elem.text().toInt();
-        builder->set_color(row, col, color);
+        builder->setColor(row, col, color);
       } catch (QString message) {
         delete builder;
         throw message;

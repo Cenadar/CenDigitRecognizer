@@ -14,9 +14,9 @@ class IViewInterface {
 
 class CViewInterface: public IViewInterface {
  public:
-  CViewInterface(QPoint base_corner_, int height_, int width_,
+  CViewInterface(QPoint baseCorner_, int height_, int width_,
                  QPaintDevice *device_, QWidget* widget_):
-    base_corner(base_corner_), height(height_), width(width_), device(device_),
+    base_corner(baseCorner_), height(height_), width(width_), device(device_),
     widget(widget_) {}
   ~CViewInterface() {}
 

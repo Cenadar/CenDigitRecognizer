@@ -1,20 +1,6 @@
 #include "cxmlparser.h"
 
-QDomElement CFileXMLParser::get_root(QString root_tagname) {
-  QFile file(file_name);
-  QDomDocument document;
-  if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-    throw QString("Cannot open to read ") + file_name;
-  if (!document.setContent(&file))
-    throw QString("Cannot parse content ") + file_name;
-  file.close();
-
-  QDomElement root = document.firstChildElement(root_tagname);
-  return root;
-}
-
-
-QDomElement XMLParser::find_first_element(QDomElement base,
+QDomElement XMLParser::findFirstElement(QDomElement base,
                                           QString tagname,
                                           QMap<QString, QString> attr) {
   QDomNodeList list = base.elementsByTagName(tagname);
@@ -33,11 +19,25 @@ QDomElement XMLParser::find_first_element(QDomElement base,
     }
   }
 
-  QString exception_message = "Cannot find " + tagname + " element\n";
+  QString exceptionMessage = "Cannot find " + tagname + " element\n";
   for(QMap<QString, QString>::Iterator it = attr.begin();
       it != attr.end(); ++it) {
-    exception_message += "Attibute: " + it.key() + "; ";
-    exception_message += "Value: " + it.value() + ";\n";
+    exceptionMessage += "Attibute: " + it.key() + "; ";
+    exceptionMessage += "Value: " + it.value() + ";\n";
   }
-  throw exception_message;
+  throw exceptionMessage;
+}
+
+
+QDomElement CFileXMLParser::getRoot(QString root_tagname) {
+  QFile file(fileName);
+  QDomDocument document;
+  if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+    throw QString("Cannot open to read ") + fileName;
+  if (!document.setContent(&file))
+    throw QString("Cannot parse content ") + fileName;
+  file.close();
+
+  QDomElement root = document.firstChildElement(root_tagname);
+  return root;
 }
