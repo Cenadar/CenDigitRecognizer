@@ -32,13 +32,14 @@ SOURCES += main.cpp\
     cxmlparser.cpp \
     settings.cpp \
     neurondisplay.cpp \
-    cneuronpainter.cpp
+    cneuronpainter.cpp \
+    domutils.cpp \
+    iconverter.cpp
 
 HEADERS  += mainwindow.h \
     cdigitneuron.h \
     cpixelmatrix.h \
     settings.h \
-    iserializable.h \
     cdigitrecognizer.h \
     cworkinterface.h \
     cpixelmatrixbuilder.h \
@@ -53,7 +54,9 @@ HEADERS  += mainwindow.h \
     cpixelmatrixreader.h \
     cxmlparser.h \
     neurondisplay.h \
-    cneuronpainter.h
+    cneuronpainter.h \
+    domutils.h \
+    iconverter.h
 
 FORMS    += mainwindow.ui \
     neurondisplay.ui

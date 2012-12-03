@@ -1,14 +1,15 @@
 #include "cpixelmatrixreader.h"
 #include "cpixelmatrixbuilder.h"
 #include "settings.h"
+#include "domutils.h"
 
 IPixelMatrix* CPixelMatrixReader::read() {
   QDomElement root = parser->getRoot("PixelMatrix");
-  if (XMLParser::findFirstElement(root, QString("Height")).text() !=
+  if (findFirstElement(root, QString("Height")).text() !=
       QString::number(RSettings::neuronHeight())) {
     throw QString("Height is incorrect");
   }
-  if (XMLParser::findFirstElement(root, QString("Width")).text() !=
+  if (findFirstElement(root, QString("Width")).text() !=
       QString::number(RSettings::neuronWidth())) {
     throw QString("Width is incorrect");
   }
@@ -19,7 +20,7 @@ IPixelMatrix* CPixelMatrixReader::read() {
       try {
         QString tagname = QString("PixelR") + QString::number(row) +
                           "C" + QString::number(col);
-        QDomElement elem = XMLParser::findFirstElement(root, tagname);
+        QDomElement elem = findFirstElement(root, tagname);
 
         TColor color = elem.text().toInt();
         builder->setColor(row, col, color);

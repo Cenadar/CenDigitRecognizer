@@ -3,14 +3,6 @@
 
 #include <QtXml>
 
-class XMLParser {
- public:
-  static QDomElement findFirstElement(QDomElement base, QString tagname,
-                                        QMap<QString, QString> attr =
-                                          QMap<QString, QString>());
-};
-
-
 class IXMLParser {
  public:
   virtual ~IXMLParser() {}

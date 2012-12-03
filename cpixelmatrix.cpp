@@ -17,33 +17,3 @@ TSignal CPixelMatrix::getSignal(int row, int col) const {
     return matrix[row][col] > 0 ? 1 : -1;
   }
 }
-
-
-QDomElement CPixelMatrix::serialize(QDomDocument& document) const {
-  QDomElement result = document.createElement("PixelMatrix");
-
-  QDomElement elem;
-  QDomText text;
-  elem = document.createElement("Height");
-  text = document.createTextNode(
-        QString::number(RSettings::neuronHeight()));
-  elem.appendChild(text);
-  result.appendChild(elem);
-
-  elem = document.createElement("Width");
-  text = document.createTextNode(
-        QString::number(RSettings::neuronWidth()));
-  elem.appendChild(text);
-  result.appendChild(elem);
-
-  for(int row = 0; row < matrix.size(); ++row)
-    for(int col = 0; col < matrix[row].size(); ++col) {
-      QDomElement elem = document.createElement("PixelR" + QString::number(row) +
-                                                "C" + QString::number(col));
-      text = document.createTextNode(QString::number(matrix[row][col]));
-      elem.appendChild(text);
-      result.appendChild(elem);
-    }
-
-  return result;
-}

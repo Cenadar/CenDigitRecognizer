@@ -3,6 +3,7 @@
 
 #include <QString>
 #include "cdigitneuron.h"
+#include "iconverter.h"
 
 using namespace std;
 
@@ -10,16 +11,15 @@ class IBaseWriter {
  public:
   virtual ~IBaseWriter() {}
 
-  virtual void write(ISerializable* obj) = 0;
+  virtual void write(IConverter* obj) = 0;
 };
 
 
 class CXMLWriter: public IBaseWriter {
  public:
-  CXMLWriter(const QString &fileName_):
-    fileName(fileName_) {}
+  CXMLWriter(const QString &fileName_): fileName(fileName_) {}
 
-  void write(ISerializable *obj);
+  void write(IConverter* obj);
  private:
   QString fileName;
 };

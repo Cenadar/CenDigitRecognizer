@@ -4,12 +4,12 @@
 #include <QtXml>
 #include "settings.h"
 
-void CXMLWriter::write(ISerializable* obj) {
+void CXMLWriter::write(IConverter* obj) {
   if (obj == NULL) throw ("Cannot write: uninitialized object");
 
   QDomDocument document;
 
-  QDomElement elem = obj->serialize(document);
+  QDomElement elem = obj->convert(document);
   document.appendChild(elem);
 
   QFile file(fileName);
@@ -20,4 +20,5 @@ void CXMLWriter::write(ISerializable* obj) {
   QTextStream stream(&file);
   stream << document.toString(2/*indent*/);
   file.close();
+  delete obj;
 }

@@ -34,37 +34,6 @@ void CDigitNeuron::teach(IPixelMatrix *input, bool correctness) {
 }
 
 
-QDomElement CDigitNeuron::serialize(QDomDocument &document) const {
-  QDomElement result = document.createElement("Neuron");
-
-  QDomElement elem;
-  QDomText text;
-  elem = document.createElement("Height");
-  text = document.createTextNode(
-        QString::number(RSettings::neuronHeight()));
-  elem.appendChild(text);
-  result.appendChild(elem);
-
-  elem = document.createElement("Width");
-  text = document.createTextNode(
-        QString::number(RSettings::neuronWidth()));
-  elem.appendChild(text);
-  result.appendChild(elem);
-
-  for(int row = 0; row < weight.size(); ++row)
-    for(int col = 0; col < weight[row].size(); ++col) {
-      elem = document.createElement("SynapseR" + QString::number(row) + "C" +
-                                    QString::number(col));
-
-      text = document.createTextNode(QString::number(weight[row][col]));
-      elem.appendChild(text);
-      result.appendChild(elem);
-    }
-
-  return result;
-}
-
-
 int CDigitNeuron::getCoefficient(int row, int col) {
   return weight[row][col];
 }

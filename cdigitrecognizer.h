@@ -24,6 +24,7 @@ class CDigitRecognizer: public IDigitRecognizer {
   QVector<TSignal> recognize(IPixelMatrix* image);
   void setNeuron(int digit, IDigitNeuronReader* reader);
   void teach(IPixelMatrix* image, int digit);
+
   IDigitNeuron* getNeuron(int digit);
   QVector<IDigitNeuron*> getNeurons();
  private:

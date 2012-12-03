@@ -11,6 +11,7 @@
 #include "cxmlparser.h"
 #include "neurondisplay.h"
 #include <cassert>
+#include "iconverter.h"
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent),
@@ -155,10 +156,10 @@ void MainWindow::on_TeachButton_clicked() {
     messager->showMessage(message);
   }
 
-  QString next_free_name = find_next_name(digit);
-  IBaseWriter* writer = new CXMLWriter(next_free_name);
+  QString nextFreeName = find_next_name(digit);
+  IBaseWriter* writer = new CXMLWriter(nextFreeName);
   try {
-    writer->write(image);
+    writer->write(new CPixelMatrixConverter(image));
   } catch(QString message) {
     messager->showMessage(message);
   }
@@ -208,7 +209,7 @@ void MainWindow::on_SaveXMLButton_clicked() {
     for(int i = 0; i < 10; ++i) {
       IBaseWriter* writer = new CXMLWriter(RSettings::neuronsDir() + "/Neuron" +
                                           QString::number(i) + ".xml");
-      writer->write(recognizer->getNeuron(i));
+      writer->write(new CDigitNeuronConverter(recognizer->getNeuron(i)));
       delete writer;
     }
   } catch(QString message) {
