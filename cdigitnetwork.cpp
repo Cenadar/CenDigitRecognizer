@@ -1,22 +1,21 @@
-#include "cdigitrecognizer.h"
+#include "cdigitnetwork.h"
 #include <cassert>
 
-CDigitRecognizer::~CDigitRecognizer() {
+CDigitNetwork::~CDigitNetwork() {
   for(int i = 0; i < 10; ++i)
     if (neurons[i] != NULL)
       delete neurons[i];
 }
 
 
-void CDigitRecognizer::setNeuron(int digit, IDigitNeuronReader *reader) {
+void CDigitNetwork::setNeuron(int digit, IDigitNeuronReader *reader) {
   assert(0 <= digit && digit < 10);
-  if (neurons[digit] != NULL)
-    delete neurons[digit];
+  if (neurons[digit] != NULL) delete neurons[digit];
   neurons[digit] = reader->read();
 }
 
 
-QVector<TSignal> CDigitRecognizer::recognize(IPixelMatrix *image) {
+QVector<TSignal> CDigitNetwork::recognize(IPixelMatrix *image) {
   QVector<TSignal> result(10);
   for(int i = 0; i < 10; ++i)
     if (neurons[i] == NULL) {
@@ -33,19 +32,19 @@ QVector<TSignal> CDigitRecognizer::recognize(IPixelMatrix *image) {
 }
 
 
-void CDigitRecognizer::teach(IPixelMatrix *image, int digit) {
+void CDigitNetwork::teach(IPixelMatrix *image, int digit) {
   for(int i = 0; i < 10; ++i)
     if (neurons[i] != NULL)
       neurons[i]->teach(image, digit == i);
 }
 
 
-IDigitNeuron* CDigitRecognizer::getNeuron(int digit) {
+IDigitNeuron* CDigitNetwork::getNeuron(int digit) {
   assert(0 <= digit && digit < 10);
   return neurons[digit];
 }
 
 
-QVector<IDigitNeuron*> CDigitRecognizer::getNeurons() {
+QVector<IDigitNeuron*> CDigitNetwork::getNeurons() {
   return neurons;
 }

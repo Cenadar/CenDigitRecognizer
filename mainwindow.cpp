@@ -29,7 +29,7 @@ MainWindow::MainWindow(QWidget *parent):
         ui->HistogramViewWidget->geometry().height(),
         ui->HistogramViewWidget->geometry().width(), this, this);
 
-  recognizer = new CDigitRecognizer();
+  network = new CDigitNetwork;
 
   // creating radio group
   QGridLayout* grid = new QGridLayout;
@@ -55,7 +55,7 @@ MainWindow::~MainWindow() {
   delete ui;
   delete paintingInterface;
   delete resultsInterface;
-  delete recognizer;
+  delete network;
   delete messager;
 }
 
@@ -90,7 +90,7 @@ void MainWindow::mouseMoveEvent(QMouseEvent *event) {
 
 
 void MainWindow::on_RecognizeButton_clicked() {
-  lastRecognition = recognizer->recognize(paintingInterface->makePixelMatrix());
+  lastRecognition = network->recognize(paintingInterface->makePixelMatrix());
   assert(lastRecognition.size() == 10);
   repaint();
 }
@@ -117,7 +117,7 @@ void MainWindow::on_actionLoad_triggered() {
                                      QString::number(i) + ".xml");
       reader = new CDigitNeuronReader(parser);
       try {
-        recognizer->setNeuron(i, reader);
+        network->setNeuron(i, reader);
       } catch (QString message) {
         messager->showMessage(message);
       }
@@ -151,7 +151,7 @@ void MainWindow::on_TeachButton_clicked() {
 
   IPixelMatrix* image = paintingInterface->makePixelMatrix();
   try {
-    recognizer->teach(image, digit);
+    network->teach(image, digit);
   } catch(QString message) {
     messager->showMessage(message);
   }
@@ -197,7 +197,7 @@ void MainWindow::on_actionErase_neurons_triggered() {
   IDigitNeuronReader* empty_reader = new CEmptyDigitNeuronReader;
   for(int i = 0; i < 10; ++i) {
     qDebug() << i;
-    recognizer->setNeuron(i, empty_reader);
+    network->setNeuron(i, empty_reader);
   }
   qDebug() << "Erased!";
   delete empty_reader;
@@ -209,7 +209,7 @@ void MainWindow::on_SaveXMLButton_clicked() {
     for(int i = 0; i < 10; ++i) {
       IBaseWriter* writer = new CXMLWriter(RSettings::neuronsDir() + "/Neuron" +
                                           QString::number(i) + ".xml");
-      writer->write(new CDigitNeuronConverter(recognizer->getNeuron(i)));
+      writer->write(new CDigitNeuronConverter(network->getNeuron(i)));
       delete writer;
     }
   } catch(QString message) {
@@ -223,7 +223,7 @@ void MainWindow::on_SaveXMLButton_clicked() {
 
 
 void MainWindow::on_actionShow_neurons_triggered() {
-  NeuronDisplay display(this, recognizer->getNeurons());
+  NeuronDisplay display(this, network->getNeurons());
   display.exec();
 }
 
@@ -293,7 +293,7 @@ void MainWindow::teachFromFiles(QStringList examples, int digit,
   QString message = "Examples \n";
   for(QStringList::Iterator it = examples.begin(); it != examples.end(); ++it) {
     IPixelMatrixReader* reader = new CPixelMatrixReader(new CFileXMLParser(*it));
-    recognizer->teach(reader->read(), digit);
+    network->teach(reader->read(), digit);
     message += "  " + *it + "\n";
     delete reader;
   }

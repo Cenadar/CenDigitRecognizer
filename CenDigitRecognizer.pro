@@ -9,7 +9,7 @@ QT       += xml
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = CenDigitRecognizer
+TARGET = CenDigitNetwork
 TEMPLATE = app
 
 
@@ -17,7 +17,6 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     cdigitneuron.cpp \
     cpixelmatrix.cpp \
-    cdigitrecognizer.cpp \
     cworkinterface.cpp \
     cpixelmatrixbuilder.cpp \
     cviewinterface.cpp \
@@ -34,13 +33,13 @@ SOURCES += main.cpp\
     neurondisplay.cpp \
     cneuronpainter.cpp \
     domutils.cpp \
-    iconverter.cpp
+    iconverter.cpp \
+    cdigitnetwork.cpp
 
 HEADERS  += mainwindow.h \
     cdigitneuron.h \
     cpixelmatrix.h \
     settings.h \
-    cdigitrecognizer.h \
     cworkinterface.h \
     cpixelmatrixbuilder.h \
     cviewinterface.h \
@@ -56,7 +55,8 @@ HEADERS  += mainwindow.h \
     neurondisplay.h \
     cneuronpainter.h \
     domutils.h \
-    iconverter.h
+    iconverter.h \
+    cdigitnetwork.h
 
 FORMS    += mainwindow.ui \
     neurondisplay.ui

@@ -1,12 +1,12 @@
-#ifndef CDIGITRECOGNIZER_H
-#define CDIGITRECOGNIZER_H
+#ifndef CDIGITNETWORK_H
+#define CDIGITNETWORK_H
 
 #include "cdigitneuron.h"
 #include "cdigitneuronreader.h"
 
-class IDigitRecognizer {
+class IDigitNetwork {
  public:
-  virtual ~IDigitRecognizer() {}
+  virtual ~IDigitNetwork() {}
 
   virtual QVector<TSignal> recognize(IPixelMatrix* image) = 0;
   virtual void setNeuron(int digit, IDigitNeuronReader* reader) = 0;
@@ -16,10 +16,10 @@ class IDigitRecognizer {
 };
 
 
-class CDigitRecognizer: public IDigitRecognizer {
+class CDigitNetwork: public IDigitNetwork {
  public:
-  CDigitRecognizer(): neurons(10, NULL) {}
-  ~CDigitRecognizer();
+  CDigitNetwork(): neurons(10, NULL) {}
+  ~CDigitNetwork();
 
   QVector<TSignal> recognize(IPixelMatrix* image);
   void setNeuron(int digit, IDigitNeuronReader* reader);
@@ -31,4 +31,4 @@ class CDigitRecognizer: public IDigitRecognizer {
   QVector<IDigitNeuron*> neurons;
 };
 
-#endif // CDIGITRECOGNIZER_H
+#endif // CDIGITNETWORK_H

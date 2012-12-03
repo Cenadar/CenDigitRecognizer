@@ -4,7 +4,7 @@
 #include <QMainWindow>
 #include "cworkinterface.h"
 #include "cviewinterface.h"
-#include "cdigitrecognizer.h"
+#include "cdigitnetwork.h"
 #include "cmessageshower.h"
 
 namespace Ui {
@@ -42,7 +42,7 @@ private:
   Ui::MainWindow* ui;
   IWorkInterface* paintingInterface;
   IViewInterface* resultsInterface;
-  IDigitRecognizer* recognizer;
+  IDigitNetwork* network;
   IMessageShower* messager;
   QRadioButton* digitRadioButtons[10];
 
