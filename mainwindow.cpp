@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent):
 
   //
   lastRecognition.fill(0, 10);
+  on_actionLoad_triggered();
 }
 
 

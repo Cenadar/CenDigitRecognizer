@@ -19,7 +19,7 @@ class IWorkInterface {
 
 class CVisualWorkInterface: public IWorkInterface {
  public:
-  CVisualWorkInterface(QPoint baseCorner_, int cell_height_, int cell_width_,
+  CVisualWorkInterface(QPoint baseCorner_, int cellHeight_, int cellWidth_,
                        IPixelMatrixBuilder* builder_);
   ~CVisualWorkInterface() {delete builder;}
 
@@ -29,9 +29,9 @@ class CVisualWorkInterface: public IWorkInterface {
   IPixelMatrix* makePixelMatrix() const;
   void clear();
  private:
-  QPoint base_corner;
-  int cell_height;
-  int cell_width;
+  QPoint baseCorner;
+  int cellHeight;
+  int cellWidth;
   IPixelMatrixBuilder *builder;
 };
 

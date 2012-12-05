@@ -32,6 +32,20 @@ QVector<TSignal> CDigitNetwork::recognize(IPixelMatrix *image) {
 }
 
 
+int CDigitNetwork::recognizeOne(QVector<TSignal> recognition) {
+  int digit = -1;
+  for(int i = 0; i < 10; ++i)
+    if (recognition[i] > 0 && recognition[i] > recognition[digit])
+      digit = i;
+  return digit;
+}
+
+
+int CDigitNetwork::recognizeOne(IPixelMatrix* image) {
+  return recognizeOne(recognize(image));
+}
+
+
 void CDigitNetwork::teach(IPixelMatrix *image, int digit) {
   for(int i = 0; i < 10; ++i)
     if (neurons[i] != NULL)

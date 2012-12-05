@@ -11,19 +11,25 @@ IDigitNeuron* CDigitNeuronReader::read() {
 
   elem = findFirstElement(root, "Height");
   if (elem.text() != QString::number(RSettings::neuronHeight()))
-    throw QString("Uncorrect height");
+    throw RMessages::incorrectNeuronHeight();
 
   elem = findFirstElement(root, "Width");
   if (elem.text() != QString::number(RSettings::neuronWidth()))
-    throw QString("Uncorrect width");
+    throw RMessages::incorrectNeuronWidth();
 
   IDigitNeuronBuilder* builder = new CDigitNeuronBuilder;
+  QDomElement synapses = findFirstElement(root, "Synapses");
+  QDomElement rowElem;
   for(int row = 0; row < RSettings::neuronHeight(); ++row) {
+    rowElem = findFirstElement(synapses, "R" + QString::number(row));
     for(int col = 0; col < RSettings::neuronWidth(); ++col) {
-      elem = findFirstElement(root, "SynapseR" +
-                                           QString::number(row) +
-                                          "C" + QString::number(col));
-      builder->setValue(row, col, elem.text().toInt());
+      try {
+        elem = findFirstElement(rowElem, "C" + QString::number(col));
+        builder->setValue(row, col, elem.text().toInt());
+      } catch (QString message) {
+        delete builder;
+        throw message;
+      }
     }
   }
 

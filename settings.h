@@ -24,11 +24,11 @@ class RSettings {
 
   static const QString neuronsDir() {return "neurons";}
   static const QString databaseDir() {return "base";}
-  static const QString tesingDir() {return "tests";}
+  static const QString tesingDir() {return "tests";}  
 };
 
 
-/*class RMessages {
+class RMessages {
  public:
   static const QString& incorrectExampleHeight() {return incorrectExampleHeight_;}
   static const QString& incorrectExampleWidth() {return incorrectExampleWidth_;}
@@ -39,7 +39,7 @@ class RSettings {
   static const QString incorrectExampleWidth_;
   static const QString incorrectNeuronHeight_;
   static const QString incorrectNeuronWidth_;
-};*/
+};
 
 
 #endif // SETTINGS_H

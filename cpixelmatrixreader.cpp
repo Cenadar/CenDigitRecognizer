@@ -4,24 +4,26 @@
 #include "domutils.h"
 
 IPixelMatrix* CPixelMatrixReader::read() {
-  QDomElement root = parser->getRoot("PixelMatrix");
-  if (findFirstElement(root, QString("Height")).text() !=
-      QString::number(RSettings::neuronHeight())) {
-    throw QString("Height is incorrect");
-  }
-  if (findFirstElement(root, QString("Width")).text() !=
-      QString::number(RSettings::neuronWidth())) {
-    throw QString("Width is incorrect");
-  }
+  QDomElement root = parser->getRoot("PixelMatrix");  
+  QDomElement elem;
+
+  elem = findFirstElement(root, QString("Height"));
+  if (elem.text() != QString::number(RSettings::neuronHeight()))
+    throw RMessages::incorrectExampleHeight();
+
+  elem = findFirstElement(root, QString("Width"));
+  if (elem.text() != QString::number(RSettings::neuronWidth()))
+    throw RMessages::incorrectExampleWidth();
+
 
   IPixelMatrixBuilder* builder = new CPixelMatrixBuilder;
+  QDomElement pixels = findFirstElement(root, "Pixels");
+  QDomElement rowElem;
   for(int row = 0; row < RSettings::neuronHeight(); ++row) {
+    rowElem = findFirstElement(pixels, "R" + QString::number(row));
     for(int col = 0; col < RSettings::neuronWidth(); ++col) {
       try {
-        QString tagname = QString("PixelR") + QString::number(row) +
-                          "C" + QString::number(col);
-        QDomElement elem = findFirstElement(root, tagname);
-
+        elem = findFirstElement(rowElem, "C" + QString::number(col));
         TColor color = elem.text().toInt();
         builder->setColor(row, col, color);
       } catch (QString message) {

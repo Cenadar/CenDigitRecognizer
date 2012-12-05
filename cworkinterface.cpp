@@ -1,10 +1,10 @@
 #include "cworkinterface.h"
 
 CVisualWorkInterface::CVisualWorkInterface(QPoint baseCorner_,
-                                           int cell_height_, int cell_width_,
+                                           int cellHeight_, int cellWidth_,
                                            IPixelMatrixBuilder* builder_):
-    base_corner(baseCorner_), cell_height(cell_height_),
-    cell_width(cell_width_), builder(builder_) {
+    baseCorner(baseCorner_), cellHeight(cellHeight_),
+    cellWidth(cellWidth_), builder(builder_) {
 }
 
 
@@ -13,37 +13,43 @@ void CVisualWorkInterface::paintEvent(QPaintEvent* /*event*/,
                                       const QPalette& palette) {
   QPainter painter(device);
 
+  QVector<QPair<TColor, Qt::GlobalColor> > grad;
+  grad.append(qMakePair(160, Qt::darkGreen));
+  grad.append(qMakePair(96, Qt::darkGray));
+  grad.append(qMakePair(48, Qt::gray));
+  grad.append(qMakePair(1, Qt::lightGray));
+
   painter.setRenderHint(QPainter::Antialiasing);
   painter.setPen(Qt::darkGreen);
   for(int row = 0; row < RSettings::neuronHeight(); ++row)
     for(int col = 0; col < RSettings::neuronWidth(); ++col) {
-      if (builder->getColor(row, col) >= 160) // TODO formalize constants
-        painter.setBrush(Qt::darkGreen);
-      else if (builder->getColor(row, col) >= 96)
-        painter.setBrush(Qt::darkGray);
-      else if (builder->getColor(row, col) >= 48)
-        painter.setBrush(Qt::gray);
-      else if (builder->getColor(row, col) >= 1)
-        painter.setBrush(Qt::lightGray);
-      else if (builder->getColor(row, col) <= 0)
-        painter.setBrush(palette.background().color());
+      bool chosen = false;
+      for(QVector<QPair<TColor, Qt::GlobalColor> >::Iterator it = grad.begin();
+          !chosen && it != grad.end(); ++it) {
+        if (builder->getColor(row, col) >= it->first) {
+          painter.setBrush(it->second);
+          chosen = true;
+        }
+      }
 
-      painter.drawRect(base_corner.x() + cell_width*col,
-                       base_corner.y() + cell_height*row,
-                       cell_width, cell_height);
+      if (!chosen) painter.setBrush(palette.background().color());
+
+      painter.drawRect(baseCorner.x() + cellWidth*col,
+                       baseCorner.y() + cellHeight*row,
+                       cellWidth, cellHeight);
     }
 }
 
 
 void CVisualWorkInterface::mouseEvent(QMouseEvent *event) {
-  int col = (event->x() - base_corner.x()) / cell_width;
-  int row = (event->y() - base_corner.y()) / cell_height;
+  int col = (event->x() - baseCorner.x()) / cellWidth;
+  int row = (event->y() - baseCorner.y()) / cellHeight;
   int radiusSq = RSettings::penRadiusSq();
   int radius = 0;
   while(radius*radius < radiusSq) ++radius;
   if (0 <= row && row < RSettings::neuronHeight() &&
       0 <= col && col < RSettings::neuronWidth()) {
-    builder->setColor(row, col, event->buttons() != Qt::RightButton/* ? 1 : 0*/);
+    builder->setColor(row, col, event->buttons() != Qt::RightButton);
     for(int dx = -radius; dx <= radius; ++dx)
       for(int dy = -radius; dy <= radius; ++dy)
         if (dx*dx + dy*dy < radiusSq)

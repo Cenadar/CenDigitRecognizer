@@ -24,12 +24,9 @@ class CDigitNeuron: public IDigitNeuron {
   ~CDigitNeuron() {}
 
   TSignal getOutput(IPixelMatrix* input) const;
-  void teach(IPixelMatrix* input, bool correctness);
-  int getWeight(int x, int y);
-
- private:
+  void teach(IPixelMatrix* input, bool correctness);  
   int getCoefficient(int row, int col);
-
+ private:
   QVector<QVector<int> > weight;
 };
 
