@@ -19,12 +19,12 @@
      <rect>
       <x>30</x>
       <y>10</y>
-      <width>91</width>
+      <width>131</width>
       <height>24</height>
      </rect>
     </property>
     <property name="text">
-     <string>Save to XML</string>
+     <string>Save neurons to files</string>
     </property>
    </widget>
    <widget class="DrawPad" name="DrawPadWidget" native="true">
@@ -153,6 +153,9 @@
      <addaction name="actionFiles"/>
     </widget>
     <widget class="QMenu" name="menuTest_from_base">
+     <property name="enabled">
+      <bool>false</bool>
+     </property>
      <property name="title">
       <string>Test from database</string>
      </property>
@@ -210,11 +213,17 @@
    </property>
   </action>
   <action name="actionBase_directory_2">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Base directory</string>
    </property>
   </action>
   <action name="actionFiles_2">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Files</string>
    </property>

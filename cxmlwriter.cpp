@@ -8,7 +8,7 @@
 void CXMLWriter::write(IConverter* obj) {
   if (obj == NULL) throw ("Cannot write: uninitialized object");
 
-  QDomDocument document("mydocument");
+  QDomDocument document("xml");
 
   QDomElement elem = obj->convert(document);
   assert(!elem.isNull());

@@ -30,4 +30,11 @@ void CViewInterface::paint(QVector<TSignal> sign) {
   PieChart.draw(&painter);
   PieChart.drawLegend(&painter);
   painter.end();
+
+
+  if (highest != -1)
+    resultLabel->setText(QObject::tr("Result of recognition: %1").arg(
+                               QString::number(highest)));
+  else
+    resultLabel->setText(QObject::tr("No recognition"));
 }

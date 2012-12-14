@@ -17,7 +17,7 @@ IPixelMatrix* CPixelMatrixReader::read() {
 
 
   IPixelMatrixBuilder* builder = new CPixelMatrixBuilder;
-  QDomElement pixels = findFirstElement(root, "Pixels");
+  QDomElement pixels = findFirstElement(root, "Pixel");
   QDomElement rowElem;
   for(int row = 0; row < RSettings::neuronHeight(); ++row) {
     rowElem = findFirstElement(pixels, "R" + QString::number(row));

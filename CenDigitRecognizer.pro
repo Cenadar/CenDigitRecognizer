@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     cneuronpainter.cpp \
     domutils.cpp \
     iconverter.cpp \
-    cdigitnetwork.cpp
+    cdigitnetwork.cpp \
+    crecognizer.cpp
 
 HEADERS  += mainwindow.h \
     cdigitneuron.h \
@@ -56,7 +57,8 @@ HEADERS  += mainwindow.h \
     cneuronpainter.h \
     domutils.h \
     iconverter.h \
-    cdigitnetwork.h
+    cdigitnetwork.h \
+    crecognizer.h
 
 FORMS    += mainwindow.ui \
     neurondisplay.ui
